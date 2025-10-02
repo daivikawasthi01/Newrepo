@@ -1,4 +1,7 @@
 Flask
 pandas
 prophet
+cmdstanpy
+numpy
 requests
+python-dotenv
