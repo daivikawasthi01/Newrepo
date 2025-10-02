@@ -1,3 +1,33 @@
+How to run the project locally
+
+An end-to-end **Health & Wellness Application** integrating **Frontend (Vite + React)**, **Backend (Node.js + Express)**, and **AI/ML Microservice (Python + Flask)** — all working together seamlessly.
+
+---
+
+## ✨ Features
+
+✅ Modern React-based UI  
+✅ Node.js Backend API  
+✅ Python AI/ML Service for Predictions / Recommendations  
+✅ Modular Architecture for Easy Scaling  
+
+---
+
+## 📁 Project Structure
+
+```bash
+.
+├── ml/                # Python-based AI/ML microservice
+├── public/            # Frontend public assets
+├── server/            # Backend (Node.js + Express)
+├── src/               # Frontend source code (if used by Vite)
+├── .env               # Environment variables
+├── package.json       # Frontend dependencies
+├── vite.config.js     # Vite configuration
+└── README.md          # You're reading it!
+
+
+
 # 🧠⚡💎 The Gauntlet of Well-Being 💎⚡🧠
 
 A gamified wellness platform inspired by the Infinity Stones concept, designed to solve user engagement challenges in health and wellness apps.
@@ -121,3 +151,4 @@ The revolutionary feature that sets this apart - gems affect each other:
 
 **Built for Star Union Dai-ichi Life Insurance Hackathon**  
 *Solving engagement challenges through gamification and behavioral psychology*
+
