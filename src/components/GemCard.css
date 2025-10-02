@@ -1,0 +1,355 @@
+.gem-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 1.5rem;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.gem-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 18px;
+  padding: 2px;
+  background: linear-gradient(45deg, transparent, var(--gem-color, #4A90E2), transparent);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gem-card.bright::before {
+  opacity: 0.6;
+  animation: borderPulse 2s ease-in-out infinite alternate;
+}
+
+.gem-card.draining::before {
+  background: linear-gradient(45deg, transparent, #e74c3c, transparent);
+  opacity: 0.8;
+  animation: warningPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes borderPulse {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+@keyframes warningPulse {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+.gem-card.bright {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.gem-card.draining {
+  background: rgba(231, 76, 60, 0.1);
+  animation: shake 0.5s ease-in-out infinite alternate;
+}
+
+.gem-card.dim {
+  background: rgba(255, 255, 255, 0.05);
+  opacity: 0.7;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(2px); }
+}
+
+.gem-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.gem-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gem-icon {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+  position: relative;
+  z-index: 2;
+}
+
+.gem-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, var(--gem-color, #4A90E2) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.gem-info {
+  flex: 1;
+}
+
+.gem-name {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.gem-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.gem-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.status-icon.bright {
+  color: #27AE60;
+}
+
+.status-icon.draining {
+  color: #e74c3c;
+}
+
+.status-icon.dim {
+  color: #f39c12;
+}
+
+.gem-power {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.power-ring {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.power-ring svg {
+  transform: rotate(-90deg);
+}
+
+.power-percentage {
+  position: absolute;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+}
+
+.gem-streak {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.streak-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+}
+
+.streak-value {
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.gem-quests {
+  margin-top: 1rem;
+}
+
+.gem-quests h4 {
+  color: white;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.quests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.quest-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.quest-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.quest-item.completed {
+  opacity: 0.6;
+  background: rgba(39, 174, 96, 0.2);
+}
+
+.quest-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.quest-name {
+  color: white;
+  font-size: 0.9rem;
+}
+
+.quest-points {
+  color: var(--gem-color, #4A90E2);
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.quest-complete-btn {
+  background: var(--gem-color, #4A90E2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quest-complete-btn:hover {
+  background: color-mix(in srgb, var(--gem-color, #4A90E2) 80%, white 20%);
+  transform: scale(1.05);
+}
+
+.quest-completed-badge {
+  background: #27AE60;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* Compact version styles */
+.gem-card.compact {
+  padding: 1rem;
+  min-height: 120px;
+}
+
+.gem-card.compact .gem-header {
+  margin-bottom: 0.5rem;
+}
+
+.gem-card.compact .gem-icon {
+  font-size: 1.8rem;
+}
+
+.gem-card.compact .gem-name {
+  font-size: 1rem;
+}
+
+.gem-card.compact .gem-status {
+  font-size: 0.75rem;
+}
+
+.compact-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.power-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.power-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gem-color, #4A90E2), color-mix(in srgb, var(--gem-color, #4A90E2) 70%, white 30%));
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+.power-text {
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  min-width: 35px;
+  text-align: right;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .gem-card {
+    padding: 1rem;
+  }
+  
+  .gem-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .gem-icon {
+    font-size: 2rem;
+  }
+  
+  .gem-name {
+    font-size: 1.1rem;
+  }
+  
+  .gem-power {
+    margin-top: 1rem;
+  }
+  
+  .quest-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .quest-complete-btn {
+    align-self: flex-end;width: auto;
+  }
+}

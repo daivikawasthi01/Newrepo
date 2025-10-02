@@ -1,0 +1,500 @@
+.gauntlet-page {
+  padding: 2rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.gauntlet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.header-content h1 {
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4, #45b7d1);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: headerGradient 4s ease-in-out infinite;
+}
+
+@keyframes headerGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.header-content p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1rem;
+}
+
+.balance-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 15px;
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+}
+
+.status-icon {
+  font-size: 1.5rem;
+}
+
+.status-text {
+  font-size: 1.1rem;
+}
+
+.balance-percentage {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.gauntlet-stats {
+  display: flex;
+  gap: 2rem;
+}
+
+.stat-item {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 15px;
+  padding: 1rem;
+  min-width: 80px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 0.3rem;
+}
+
+.gauntlet-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.control-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.control-btn.info {
+  background: rgba(74, 144, 226, 0.3);
+}
+
+.control-btn.decay {
+  background: rgba(231, 76, 60, 0.3);
+}
+
+.control-btn.reset {
+  background: rgba(149, 165, 166, 0.3);
+}
+
+.control-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.gauntlet-container {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  min-height: 600px;
+}
+
+.gauntlet-visualization {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  min-height: 600px;
+}
+
+.gauntlet-ring {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.balance-core {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.5s ease;
+  z-index: 10;
+}
+
+.balance-percentage-large {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.balance-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 0.2rem;
+}
+
+.gem-position {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 5;
+}
+
+.gem-position.selected {
+  z-index: 15;
+}
+
+.gem-orb {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid var(--gem-color, #4A90E2);
+  transition: all 0.3s ease;
+  margin-bottom: 0.5rem;
+}
+
+.gem-position.bright .gem-orb {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 0 30px var(--gem-color, #4A90E2),
+    0 0 60px rgba(255, 255, 255, 0.2);
+  border-width: 3px;
+}
+
+.gem-position.draining .gem-orb {
+  background: rgba(231, 76, 60, 0.2);
+  border-color: #e74c3c;
+  animation: gemDrainPulse 1s ease-in-out infinite alternate;
+}
+
+.gem-position.dim .gem-orb {
+  background: rgba(149, 165, 166, 0.1);
+  border-color: #95a5a6;
+  opacity: 0.6;
+}
+
+@keyframes gemDrainPulse {
+  0% { 
+    transform: scale(1);
+    box-shadow: 0 0 20px #e74c3c;
+  }
+  100% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 40px #e74c3c;
+  }
+}
+
+.gem-icon-large {
+  font-size: 2rem;
+  z-index: 2;
+  position: relative;
+}
+
+.gem-power-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(-90deg);
+}
+
+.gem-aura {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: radial-gradient(circle, var(--gem-color, #4A90E2) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.gem-label {
+  text-align: center;
+  color: white;
+}
+
+.gem-name-small {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.gem-power-text {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.interconnections {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.connection-line {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.connection-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.gem-details-panel {
+  width: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.gem-insights {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.gem-insights h3 {
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.insight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.insight-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.insight-item.positive {
+  background: rgba(39, 174, 96, 0.2);
+  color: #2ecc71;
+  border: 1px solid rgba(39, 174, 96, 0.3);
+}
+
+.insight-item.warning {
+  background: rgba(243, 156, 18, 0.2);
+  color: #f39c12;
+  border: 1px solid rgba(243, 156, 18, 0.3);
+}
+
+.insight-item.info {
+  background: rgba(74, 144, 226, 0.2);
+  color: #4A90E2;
+  border: 1px solid rgba(74, 144, 226, 0.3);
+}
+
+.close-panel-btn {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(149, 165, 166, 0.3);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.close-panel-btn:hover {
+  background: rgba(149, 165, 166, 0.5);
+}
+
+.status-messages {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.status-messages h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.status-message {
+  padding: 0.8rem;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  border-left: 4px solid;
+}
+
+.status-message.info {
+  background: rgba(74, 144, 226, 0.1);
+  border-color: #4A90E2;
+  color: #2c3e50;
+}
+
+.status-message.achievement {
+  background: rgba(39, 174, 96, 0.1);
+  border-color: #27AE60;
+  color: #2c3e50;
+}
+
+.status-message.warning {
+  background: rgba(230, 126, 34, 0.1);
+  border-color: #E67E22;
+  color: #2c3e50;
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  .gauntlet-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .gem-details-panel {
+    width: 100%;
+    max-width: 500px;
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .gauntlet-page {
+    padding: 1rem;
+  }
+  
+  .gauntlet-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .header-content h1 {
+    font-size: 2rem;
+  }
+  
+  .gauntlet-stats {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .gauntlet-ring {
+    width: 350px;
+    height: 350px;
+  }
+  
+  .gem-orb {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .gem-icon-large {
+    font-size: 1.5rem;
+  }
+  
+  .balance-core {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .balance-percentage-large {
+    font-size: 1.4rem;
+  }
+  
+  .status-messages {
+    position: static;
+    margin-top: 2rem;
+    max-width: none;
+  }
+}

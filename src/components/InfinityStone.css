@@ -1,0 +1,311 @@
+.infinity-stone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+.stone-outer-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--stone-size);
+  height: var(--stone-size);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.stone-power-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.stone-body {
+  width: var(--stone-size);
+  height: var(--stone-size);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, 
+    var(--stone-color) 0%, 
+    color-mix(in srgb, var(--stone-color) 70%, black 30%) 50%,
+    color-mix(in srgb, var(--stone-color) 40%, black 60%) 100%
+  );
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.infinity-stone.active .stone-body {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.infinity-stone.inactive .stone-body {
+  opacity: 0.6;
+  filter: grayscale(50%);
+}
+
+.stone-surface {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.hexagon-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+}
+
+.hexagon {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+  transition: all 0.3s ease;
+}
+
+.infinity-stone.active .hexagon {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.stone-icon {
+  font-size: calc(var(--stone-size) * 0.35);
+  z-index: 4;
+  position: relative;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+  transition: all 0.3s ease;
+}
+
+.power-indicator {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  border: 1px solid var(--stone-color);
+  z-index: 5;
+}
+
+.energy-particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 6;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--stone-color);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--stone-color);
+}
+
+.stone-name {
+  margin-top: 0.8rem;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  min-height: 1.2rem;
+}
+
+.click-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--stone-size);
+  height: var(--stone-size);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 7;
+}
+
+/* Size Variants */
+.infinity-stone.small {
+  --stone-size: 60px;
+}
+
+.infinity-stone.small .stone-name {
+  font-size: 0.7rem;
+  margin-top: 0.5rem;
+}
+
+.infinity-stone.small .power-indicator {
+  font-size: 8px;
+  padding: 1px 4px;
+}
+
+.infinity-stone.medium {
+  --stone-size: 100px;
+}
+
+.infinity-stone.medium .stone-name {
+  font-size: 0.8rem;
+  margin-top: 0.6rem;
+}
+
+.infinity-stone.large {
+  --stone-size: 140px;
+}
+
+.infinity-stone.xlarge {
+  --stone-size: 180px;
+}
+
+.infinity-stone.xlarge .stone-name {
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+/* Hover Effects */
+.infinity-stone:hover .stone-body {
+  transform: scale(1.05);
+}
+
+.infinity-stone:hover .stone-icon {
+  transform: scale(1.1);
+}
+
+.infinity-stone.active:hover .stone-body {
+  box-shadow: 
+    0 0 30px var(--glow-color),
+    0 0 60px var(--stone-color),
+    0 0 90px var(--glow-color);
+}
+
+/* Special Effects for Different Stone Types */
+.infinity-stone.mind.active .stone-body {
+  animation: mindPulse 3s ease-in-out infinite;
+}
+
+@keyframes mindPulse {
+  0%, 100% { 
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  50% { 
+    filter: hue-rotate(20deg) brightness(1.2);
+  }
+}
+
+.infinity-stone.body.active .stone-body {
+  animation: powerSurge 2s ease-in-out infinite;
+}
+
+@keyframes powerSurge {
+  0%, 100% { 
+    transform: scale(1);
+  }
+  50% { 
+    transform: scale(1.02);
+  }
+}
+
+.infinity-stone.soul.active .stone-body {
+  animation: soulGlow 4s ease-in-out infinite;
+}
+
+@keyframes soulGlow {
+  0%, 100% { 
+    opacity: 1;
+  }
+  50% { 
+    opacity: 0.8;
+  }
+}
+
+.infinity-stone.wealth.active .stone-body {
+  animation: timeRipple 3s linear infinite;
+}
+
+@keyframes timeRipple {
+  0% { 
+    filter: hue-rotate(0deg);
+  }
+  100% { 
+    filter: hue-rotate(360deg);
+  }
+}
+
+.infinity-stone.purpose.active .stone-body {
+  animation: realityShift 2.5s ease-in-out infinite;
+}
+
+@keyframes realityShift {
+  0%, 100% { 
+    filter: saturate(1) contrast(1);
+  }
+  50% { 
+    filter: saturate(1.5) contrast(1.2);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .infinity-stone.large {
+    --stone-size: 100px;
+  }
+  
+  .infinity-stone.xlarge {
+    --stone-size: 120px;
+  }
+  
+  .stone-name {
+    font-size: 0.8rem;
+  }
+  
+  .hexagon {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .infinity-stone.large {
+    --stone-size: 80px;
+  }
+  
+  .infinity-stone.xlarge {
+    --stone-size: 100px;
+  }
+  
+  .stone-name {
+    font-size: 0.7rem;
+    margin-top: 0.5rem;
+  }
+}

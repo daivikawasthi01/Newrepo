@@ -1,0 +1,293 @@
+.simple-gauntlet {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 100%);
+  min-height: 100vh;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.gauntlet-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.gauntlet-header h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  background: linear-gradient(45deg, #ffd700, #ffed4e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gauntlet-header p {
+  font-size: 1.1em;
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+.overall-balance {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.balance-display {
+  background: linear-gradient(135deg, #4a0e4e, #8b3a8b);
+  padding: 20px 30px;
+  border-radius: 15px;
+  text-align: center;
+  border: 2px solid #ff6b9d;
+  box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+}
+
+.balance-number {
+  display: block;
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #ff6b9d;
+}
+
+.balance-label {
+  display: block;
+  font-size: 0.9em;
+  opacity: 0.8;
+  margin-top: 5px;
+}
+
+.reset-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.reset-btn {
+  background: linear-gradient(135deg, #ff4444, #cc0000);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 68, 68, 0.4);
+}
+
+.stones-leaderboard {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 30px;
+}
+
+.leaderboard-header {
+  display: grid;
+  grid-template-columns: 100px 1fr 150px 100px;
+  gap: 20px;
+  padding: 15px 20px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 20px;
+  font-weight: bold;
+  opacity: 0.8;
+}
+
+.stone-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 150px 100px;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.stone-row:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.rank-number {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.stone-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.stone-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.stone-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.stone-name {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.stone-type {
+  font-size: 0.8em;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.power-display {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.power-bar {
+  flex: 1;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.power-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 1s ease;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.power-number {
+  font-weight: bold;
+  font-size: 1.1em;
+  min-width: 50px;
+  text-align: right;
+}
+
+.change-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.change-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.change-arrow.up {
+  color: #00ff00;
+}
+
+.change-arrow.down {
+  color: #ff4444;
+}
+
+.change-value {
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.demo-instructions {
+  margin-top: 30px;
+}
+
+.instruction-card {
+  background: linear-gradient(135deg, #1a1a3a, #2d2d5a);
+  padding: 25px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.instruction-icon {
+  color: #ffd700;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.instruction-card h3 {
+  margin: 0 0 15px 0;
+  color: #ffd700;
+  font-size: 1.3em;
+}
+
+.instruction-card p {
+  margin: 5px 0;
+  opacity: 0.9;
+  font-size: 1em;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #ffd700;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .simple-gauntlet {
+    padding: 15px;
+  }
+  
+  .leaderboard-header,
+  .stone-row {
+    grid-template-columns: 80px 1fr 120px 80px;
+    gap: 10px;
+    padding: 15px;
+  }
+  
+  .stone-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+  }
+  
+  .gauntlet-header h1 {
+    font-size: 2em;
+  }
+  
+  .instruction-card {
+    flex-direction: column;
+    gap: 15px;
+  }
+}

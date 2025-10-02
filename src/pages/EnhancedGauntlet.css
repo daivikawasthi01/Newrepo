@@ -1,0 +1,573 @@
+/* Enhanced Gauntlet Styles */
+.gauntlet-page.enhanced {
+  padding: 20px;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at center, #1a0b3d 0%, #0d0518 70%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.gauntlet-page.enhanced::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: twinkle 4s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 20px;
+}
+
+.loading-spinner.cosmic {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(138, 43, 226, 0.3);
+  border-top: 4px solid #8a2be2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite, cosmicGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes cosmicGlow {
+  0% { box-shadow: 0 0 20px rgba(138, 43, 226, 0.5); }
+  100% { box-shadow: 0 0 40px rgba(255, 20, 147, 0.8); }
+}
+
+/* Enhanced Header */
+.gauntlet-header.enhanced {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.cosmic-title {
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+  background: linear-gradient(45deg, #8a2be2, #ff1493, #00bfff, #32cd32, #ffd700, #ff4500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 300% 300%;
+  animation: cosmicText 4s ease-in-out infinite;
+  text-align: center;
+}
+
+.cosmic-subtitle {
+  font-size: 1.3rem;
+  opacity: 0.9;
+  text-align: center;
+  margin-bottom: 30px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes cosmicText {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Balance Status */
+.balance-status.enhanced {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 25px;
+  border-radius: 20px;
+  border: 2px solid rgba(138, 43, 226, 0.3);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.balance-percentage.cosmic {
+  font-size: 3rem;
+  font-weight: bold;
+  text-shadow: 0 0 20px currentColor;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Balance Trend Visualization */
+.balance-trend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.trend-line {
+  display: flex;
+  align-items: end;
+  gap: 4px;
+  height: 40px;
+}
+
+.trend-point {
+  width: 8px;
+  min-height: 4px;
+  border-radius: 4px 4px 0 0;
+  transition: all 0.3s ease;
+}
+
+.trend-label {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* Enhanced Stats */
+.gauntlet-stats.enhanced {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.stat-item.cosmic {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  backdrop-filter: blur(20px);
+  text-align: center;
+  min-width: 120px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.stat-item.cosmic:hover {
+  transform: translateY(-5px);
+  border-color: rgba(138, 43, 226, 0.4);
+}
+
+.stat-item.cosmic .stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 10px currentColor;
+}
+
+.stat-glow {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  opacity: 0.6;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+/* Enhanced Controls */
+.gauntlet-controls.enhanced {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+
+.control-btn.cosmic {
+  background: linear-gradient(45deg, rgba(138, 43, 226, 0.8), rgba(255, 20, 147, 0.8));
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-btn.cosmic:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Enhanced Gauntlet Visualization */
+.gauntlet-container.enhanced {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 600px;
+  position: relative;
+  z-index: 2;
+}
+
+.gauntlet-ring.cosmic {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Enhanced Balance Core */
+.balance-core.cosmic {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(138, 43, 226, 0.2), rgba(0, 0, 0, 0.8));
+  border: 3px solid rgba(138, 43, 226, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(20px);
+  z-index: 10;
+}
+
+.balance-percentage-large.cosmic {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(138, 43, 226, 0.8);
+}
+
+.balance-label.cosmic {
+  font-size: 0.9rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-top: 5px;
+  opacity: 0.9;
+  background: linear-gradient(45deg, #8a2be2, #ff1493);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Power Rings */
+.power-rings {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.power-ring {
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  border: 2px solid rgba(138, 43, 226, 0.3);
+  border-radius: 50%;
+  border-style: dashed;
+  top: -10%;
+  left: -10%;
+}
+
+.power-ring:nth-child(2) {
+  width: 140%;
+  height: 140%;
+  top: -20%;
+  left: -20%;
+  border-color: rgba(255, 20, 147, 0.2);
+}
+
+.power-ring:nth-child(3) {
+  width: 160%;
+  height: 160%;
+  top: -30%;
+  left: -30%;
+  border-color: rgba(0, 191, 255, 0.1);
+}
+
+/* Enhanced Interconnections */
+.interconnections.cosmic {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.connections-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Enhanced Stone Positions */
+.stone-position.enhanced {
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 5;
+}
+
+.stone-position.enhanced.animating {
+  animation: stoneActivation 1s ease-in-out;
+}
+
+@keyframes stoneActivation {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.2) rotate(90deg); }
+  50% { transform: scale(1.1) rotate(180deg); }
+  75% { transform: scale(1.2) rotate(270deg); }
+}
+
+.stone-info.enhanced {
+  text-align: center;
+  margin-top: 15px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  min-width: 120px;
+}
+
+.stone-name {
+  display: block;
+  font-weight: bold;
+  color: #fff;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.stone-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+.stone-stats .level {
+  color: #ffd700;
+}
+
+.stone-stats .progress {
+  color: #00ff00;
+}
+
+.stone-stats .energy {
+  color: #00bfff;
+}
+
+.connection-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.connection-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+/* Enhanced Stone Aura */
+.stone-aura.enhanced {
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  top: -10%;
+  left: -10%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Real-time Updates Panel */
+.realtime-updates.gauntlet {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(26, 11, 61, 0.95);
+  border: 2px solid rgba(138, 43, 226, 0.3);
+  border-radius: 15px;
+  padding: 15px;
+  min-width: 280px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.updates-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: #8a2be2;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.update-item {
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  border-left: 3px solid transparent;
+}
+
+.update-item.system {
+  background: rgba(138, 43, 226, 0.1);
+  border-left-color: #8a2be2;
+}
+
+.update-item.stone-activation {
+  background: rgba(255, 20, 147, 0.1);
+  border-left-color: #ff1493;
+}
+
+/* Gauntlet Insights */
+.gauntlet-insights {
+  margin-top: 40px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  position: relative;
+  z-index: 2;
+}
+
+.gauntlet-insights h3 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #8a2be2;
+  font-size: 1.5rem;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.insight-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.insight-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(138, 43, 226, 0.4);
+  box-shadow: 0 5px 15px rgba(138, 43, 226, 0.2);
+}
+
+.insight-icon {
+  color: #8a2be2;
+  flex-shrink: 0;
+}
+
+.insight-card h4 {
+  margin: 0 0 5px 0;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.insight-card p {
+  margin: 0;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .gauntlet-page.enhanced {
+    padding: 15px;
+  }
+  
+  .cosmic-title {
+    font-size: 2.5rem;
+  }
+  
+  .gauntlet-header.enhanced {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .gauntlet-stats.enhanced {
+    justify-content: center;
+  }
+  
+  .gauntlet-controls.enhanced {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .gauntlet-ring.cosmic {
+    width: 400px;
+    height: 400px;
+  }
+  
+  .balance-core.cosmic {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .balance-percentage-large.cosmic {
+    font-size: 2rem;
+  }
+  
+  .realtime-updates.gauntlet {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-top: 20px;
+    width: 100%;
+  }
+  
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Additional Animations */
+@keyframes twinkle {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.8; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes glow {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
