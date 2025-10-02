@@ -49,21 +49,29 @@ const Analytics = () => {
   const [predictions, setPredictions] = useState([]);
   const [backendForecast, setBackendForecast] = useState(null);
   const [backendInsights, setBackendInsights] = useState(null);
+  const [useBackend, setUseBackend] = useState(true);
+  console.log("backendForecast", backendForecast);
+  console.log("backendInsights", backendInsights);
+  console.log("predictions", predictions);
+  <div className="toggle-container">
+  <button 
+    onClick={() => setUseBackend(!useBackend)}
+    className={`toggle-btn ${useBackend ? "active" : ""}`}
+  >
+    {useBackend ? "Using Backend AI 🤖" : "Using Local TF.js 📈"}
+  </button>
+</div>
 
-  // Generate mock historical data for demonstration
+  // Generate mock historical data
   const generateHistoricalData = () => {
     const days = timeRange === 'week' ? 7 : timeRange === 'month' ? 30 : 90;
     const data = [];
-    
     for (let i = days; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
-      
-      // Generate realistic wellness data
       const baseBalance = 60 + Math.sin(i * 0.1) * 20;
       const noise = (Math.random() - 0.5) * 20;
       const balance = Math.max(0, Math.min(100, baseBalance + noise));
-      
       data.push({
         date: date.toISOString().split('T')[0],
         balance: Math.round(balance),
@@ -72,91 +80,45 @@ const Analytics = () => {
         experience: Math.floor(Math.random() * 100) + 50
       });
     }
-    
     return data;
   };
-
   const [historicalData] = useState(generateHistoricalData());
- useEffect(() => {
-  async function runLocalML() {
-    // Example: use your actual wellness balance history here
-    const history = historicalData.map(d => d.balance);
 
-    const xs = tf.tensor1d(history.map((_, i) => i));
-    const ys = tf.tensor1d(history);
-
-    const model = tf.sequential();
-    model.add(tf.layers.dense({ units: 1, inputShape: [1] }));
-    model.compile({ optimizer: "sgd", loss: "meanSquaredError" });
-
-    await model.fit(xs, ys, { epochs: 200 });
-
-    const futureXs = tf.tensor1d(
-      Array.from({ length: 7 }, (_, i) => history.length + i)
-    );
-    const preds = model.predict(futureXs);
-    const predValues = Array.from(preds.dataSync());
-
-    setPredictions(predValues);
-  }
-
-  async function fetchBackendML() {
-    try {
-      const userId = state.user.id || "demo"; // fallback
-      const forecastRes = await axios.get(`/api/analytics/forecast/${userId}`);
-      const insightsRes = await axios.get(`/api/quests/recommendations/${userId}`);
-      if (forecastRes.data) setBackendForecast(forecastRes.data);
-      if (insightsRes.data) setBackendInsights(insightsRes.data);
-    } catch (err) {
-      console.warn("Backend ML unavailable, using local TF.js only.");
+  useEffect(() => {
+    async function runLocalML() {
+      const history = historicalData.map(d => d.balance);
+      const xs = tf.tensor1d(history.map((_, i) => i));
+      const ys = tf.tensor1d(history);
+      const model = tf.sequential();
+      model.add(tf.layers.dense({ units: 1, inputShape: [1] }));
+      model.compile({ optimizer: "sgd", loss: "meanSquaredError" });
+      await model.fit(xs, ys, { epochs: 200 });
+      const futureXs = tf.tensor1d(
+        Array.from({ length: 7 }, (_, i) => history.length + i)
+      );
+      const preds = model.predict(futureXs);
+      const predValues = Array.from(preds.dataSync());
+      setPredictions(predValues);
     }
-  }
 
-  runLocalML();
-  fetchBackendML();
-}, []);
+    async function fetchBackendML() {
+      try {
+        const userId = state.user?.id || "demo";
+        const forecastRes = await axios.get(`/api/analytics/forecast/${userId}`);
+        const insightsRes = await axios.get(`/api/quests/recommendations/${userId}`);
 
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'top',
-        labels: {
-          color: 'white',
-          font: {
-            size: 12
-          }
-        }
-      },
-      tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: 'white',
-        bodyColor: 'white',
-        borderColor: 'rgba(255, 255, 255, 0.2)',
-        borderWidth: 1
-      }
-    },
-    scales: {
-      x: {
-        ticks: {
-          color: 'rgba(255, 255, 255, 0.8)'
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)'
-        }
-      },
-      y: {
-        ticks: {
-          color: 'rgba(255, 255, 255, 0.8)'
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)'
-        }
+        if (forecastRes.data?.values) setBackendForecast(forecastRes.data.values);
+        if (insightsRes.data) setBackendInsights(insightsRes.data);
+      } catch (err) {
+        console.warn("Backend ML unavailable, using local TF.js only.");
       }
     }
-  };
 
+    runLocalML();
+    fetchBackendML();
+  }, [state.user]);
+
+  // Chart data
 const wellnessBalanceData = {
   labels: [
     ...historicalData.map(d => new Date(d.date).toLocaleDateString()),
@@ -180,7 +142,21 @@ const wellnessBalanceData = {
       pointBorderWidth: 2,
       pointRadius: 5
     },
-    ...(predictions.length > 0
+    ...(useBackend && backendForecast?.length > 0
+      ? [{
+          label: "Backend Forecast (Prophet)",
+          data: [
+            ...Array(historicalData.length).fill(null),
+            ...backendForecast.map(v => Math.round(v.predicted_balance))
+          ],
+          borderColor: "orange",
+          borderDash: [6, 6],
+          borderWidth: 2,
+          tension: 0.3,
+          fill: false,
+        }]
+      : []),
+    ...(!useBackend && predictions.length > 0
       ? [{
           label: "Local Forecast (TF.js)",
           data: [
@@ -193,32 +169,18 @@ const wellnessBalanceData = {
           tension: 0.3,
           fill: false,
         }]
-      : []),
-    ...(backendForecast && backendForecast.values
-      ? [{
-          label: "Backend Forecast (Prophet)",
-          data: [
-            ...Array(historicalData.length).fill(null),
-            ...backendForecast.values.map(v => Math.round(v))
-          ],
-          borderColor: "orange",
-          borderDash: [6, 6],
-          borderWidth: 2,
-          tension: 0.3,
-          fill: false,
-        }]
       : [])
   ]
 };
 
   const gemStatusData = {
-    labels: state.gems.map(gem => gem.name),
+    labels: state.gems?.map(gem => gem.name) || [],
     datasets: [
       {
         label: 'Gem Power Level',
-        data: state.gems.map(gem => gem.power),
-        backgroundColor: state.gems.map(gem => gem.color),
-        borderColor: state.gems.map(gem => gem.color),
+        data: state.gems?.map(gem => gem.power) || [],
+        backgroundColor: state.gems?.map(gem => gem.color) || [],
+        borderColor: state.gems?.map(gem => gem.color) || [],
         borderWidth: 2
       }
     ]
@@ -229,9 +191,9 @@ const wellnessBalanceData = {
     datasets: [
       {
         data: [
-          state.gems.filter(gem => gem.status === 'bright').length,
-          state.gems.filter(gem => gem.status === 'draining').length,
-          state.gems.filter(gem => gem.status === 'dim').length
+          state.gems?.filter(gem => gem.status === 'bright').length || 0,
+          state.gems?.filter(gem => gem.status === 'draining').length || 0,
+          state.gems?.filter(gem => gem.status === 'dim').length || 0
         ],
         backgroundColor: ['#27AE60', '#E67E22', '#95A5A6'],
         borderColor: ['#2ECC71', '#F39C12', '#BDC3C7'],
@@ -240,33 +202,34 @@ const wellnessBalanceData = {
     ]
   };
 
-const activityData = {
-  labels: historicalData.slice(-7).map(d => new Date(d.date).toLocaleDateString()),
-  datasets: [
-    {
-      label: 'Completed Quests',
-      data: historicalData.slice(-7).map(d => d.completedQuests),
-      backgroundColor: 'rgba(142, 68, 173, 0.8)',
-      borderColor: '#8E44AD',
-      borderWidth: 2
-    },
-    ...(backendForecast ? [{
-      label: "Backend Forecast (Prophet)",
-      data: backendForecast.values || [],
-      borderColor: "orange",
-      borderDash: [4, 4],
-      tension: 0.3,
-    }] : []),
-    {
-      label: 'Experience Gained',
-      data: historicalData.slice(-7).map(d => d.experience),
-      backgroundColor: 'rgba(230, 126, 34, 0.8)',
-      borderColor: '#E67E22',
-      borderWidth: 2
-    }
-  ]
-};
-
+  const activityData = {
+    labels: historicalData.slice(-7).map(d => new Date(d.date).toLocaleDateString()),
+    datasets: [
+      {
+        label: 'Completed Quests',
+        data: historicalData.slice(-7).map(d => d.completedQuests),
+        backgroundColor: 'rgba(142, 68, 173, 0.8)',
+        borderColor: '#8E44AD',
+        borderWidth: 2
+      },
+      ...(backendForecast && backendForecast.length > 0
+        ? [{
+            label: "Backend Forecast (Prophet)",
+            data: backendForecast.map(v => Math.round(v.predicted_balance)),
+            borderColor: "orange",
+            borderDash: [4, 4],
+            tension: 0.3,
+          }]
+        : []),
+      {
+        label: 'Experience Gained',
+        data: historicalData.slice(-7).map(d => d.experience),
+        backgroundColor: 'rgba(230, 126, 34, 0.8)',
+        borderColor: '#E67E22',
+        borderWidth: 2
+      }
+    ]
+  };
 
   const analyticsCards = [
     {
@@ -287,7 +250,7 @@ const activityData = {
     },
     {
       title: 'Total Experience',
-      value: state.user.experience,
+      value: state.user?.experience || 0,
       change: '+150',
       changeType: 'positive',
       icon: Award,
@@ -295,7 +258,7 @@ const activityData = {
     },
     {
       title: 'Active Streak',
-      value: `${state.user.streak} days`,
+      value: `${state.user?.streak || 0} days`,
       change: 'New record!',
       changeType: 'positive',
       icon: Zap,
@@ -324,8 +287,16 @@ const activityData = {
     }
   ];
 
+  // Chart options
+  const chartOptions = {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    maintainAspectRatio: false,
+  };
+
   return (
     <div className="analytics-page">
+      {/* Header & Time Range */}
       <div className="analytics-header">
         <motion.div
           className="header-content"
@@ -343,10 +314,10 @@ const activityData = {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          {['week', 'month', 'quarter'].map(range => (
+                  {["week", "month", "quarter"].map((range) => (
             <motion.button
               key={range}
-              className={`range-btn ${timeRange === range ? 'active' : ''}`}
+              className={`range-btn ${timeRange === range ? "active" : ""}`}
               onClick={() => setTimeRange(range)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -364,32 +335,33 @@ const activityData = {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.6 }}
       >
-        {analyticsCards.map((card, index) => (
-          <motion.div
-            key={card.title}
-            className="metric-card"
-            style={{ '--card-color': card.color }}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4 + index * 0.1, duration: 0.5 }}
-            whileHover={{ scale: 1.02, y: -5 }}
-          >
-            <div className="metric-header">
-              <div className="metric-icon">
-                <card.icon size={24} />
+        {analyticsCards.map((card, index) => {
+          const Icon = card.icon;
+          return (
+            <motion.div
+              key={card.title}
+              className="metric-card"
+              style={{ "--card-color": card.color }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.4 + index * 0.1, duration: 0.5 }}
+              whileHover={{ scale: 1.02, y: -5 }}
+            >
+              <div className="metric-header">
+                <div className="metric-icon">
+                  <Icon size={24} />
+                </div>
+                <div className="metric-change">
+                  <span className={`change ${card.changeType}`}>{card.change}</span>
+                </div>
               </div>
-              <div className="metric-change">
-                <span className={`change ${card.changeType}`}>
-                  {card.change}
-                </span>
+              <div className="metric-content">
+                <h3 className="metric-value">{card.value}</h3>
+                <p className="metric-title">{card.title}</p>
               </div>
-            </div>
-            <div className="metric-content">
-              <h3 className="metric-value">{card.value}</h3>
-              <p className="metric-title">{card.title}</p>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </motion.div>
 
       {/* Charts Section */}
@@ -407,8 +379,8 @@ const activityData = {
               <h3>Wellness Balance Trend</h3>
             </div>
             <div className="chart-controls">
-              <select 
-                value={selectedMetric} 
+              <select
+                value={selectedMetric}
                 onChange={(e) => setSelectedMetric(e.target.value)}
                 className="metric-selector"
               >
@@ -455,12 +427,9 @@ const activityData = {
             </div>
           </div>
           <div className="chart-wrapper">
-            <Doughnut 
-              data={gemDistributionData} 
-              options={{
-                ...chartOptions,
-                scales: undefined
-              }} 
+            <Doughnut
+              data={gemDistributionData}
+              options={{ ...chartOptions, scales: undefined }}
             />
           </div>
         </motion.div>
@@ -484,89 +453,100 @@ const activityData = {
         </motion.div>
       </div>
 
-      {/* Insights Section */}
-      <motion.div
-        className="insights-section"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.9, duration: 0.6 }}
-      >
-        <div className="section-header">
-          <h2>AI-Powered Insights</h2>
-          <p>Personalized recommendations based on your wellness patterns</p>
-        </div>
+{/* Insights Section */}
+<motion.div
+  className="insights-section"
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.9, duration: 0.6 }}
+>
+  <div className="section-header flex items-center justify-between">
+    <div>
+      <h2>AI-Powered Insights</h2>
+      <p>Personalized recommendations based on your wellness patterns</p>
+    </div>
 
-<div className="insights-grid">
-  {(() => {
-    // PRIORITY: backend -> local ML -> static
-    if (backendInsights && backendInsights.length > 0) {
-      return backendInsights.map((insight, i) => (
-        <motion.div
-          key={i}
-          className="insight-card backend"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 + i * 0.1, duration: 0.5 }}
-          whileHover={{ scale: 1.02 }}
-        >
-          <div className="insight-header">
-            <div className="insight-indicator">🤖</div>
-            <h4>AI Insight</h4>
-          </div>
-          <p className="insight-description">{insight}</p>
-        </motion.div>
-      ));
-    } else if (predictions.length > 0) {
-      const localMsgs = [
-        `Your wellness balance is predicted to change by ${Math.round(
-          predictions[predictions.length - 1] - predictions[0]
-        )}% over the next week.`,
-        "Keep consistency — local trend shows improvement!",
-      ];
-      return localMsgs.map((msg, i) => (
-        <motion.div
-          key={i}
-          className="insight-card local"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 + i * 0.1, duration: 0.5 }}
-          whileHover={{ scale: 1.02 }}
-        >
-          <div className="insight-header">
-            <div className="insight-indicator">📈</div>
-            <h4>Predicted Insight</h4>
-          </div>
-          <p className="insight-description">{msg}</p>
-        </motion.div>
-      ));
-    } else {
-      return insights.map((insight, index) => (
-        <motion.div
-          key={index}
-          className={`insight-card ${insight.type}`}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 + index * 0.1, duration: 0.5 }}
-          whileHover={{ scale: 1.02 }}
-        >
-          <div className={`insight-indicator ${insight.type}`}>
-            {insight.type === "positive" && "✅"}
-            {insight.type === "warning" && "⚠️"}
-            {insight.type === "info" && "ℹ️"}
-          </div>
-          <h4>{insight.title}</h4>
-          <p className="insight-description">{insight.description}</p>
-          <div className="insight-recommendation">
-            <strong>Recommendation:</strong> {insight.recommendation}
-          </div>
-        </motion.div>
-      ));
-    }
-  })()}
-</div>
+    {/* Toggle Button */}
+    <button
+      onClick={() => setUseBackend(!useBackend)}
+      className="px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition"
+    >
+      {useBackend ? "Show Local Forecast" : "Show AI Recommendations"}
+    </button>
+  </div>
 
+  <div className="insights-grid">
+    {(() => {
+      if (useBackend && backendInsights?.recommendations?.length > 0) {
+        return backendInsights.recommendations.map((rec, i) => (
+          <motion.div
+            key={rec.id || i}
+            className="insight-card backend"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 + i * 0.1, duration: 0.5 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="insight-header">
+              <div className="insight-indicator">🤖</div>
+              <h4>{rec.name}</h4>
+            </div>
+            <p className="insight-description">{rec.description}</p>
+            <div className="insight-category">
+              <strong>Category:</strong> {rec.category}
+            </div>
+          </motion.div>
+        ));
+      } else if (!useBackend && predictions.length > 0) {
+        const localMsgs = [
+          `Your wellness balance is predicted to change by ${Math.round(
+            predictions[predictions.length - 1] - predictions[0]
+          )}% over the next week.`,
+          "Keep consistency — local trend shows improvement!",
+        ];
+        return localMsgs.map((msg, i) => (
+          <motion.div
+            key={i}
+            className="insight-card local"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 + i * 0.1, duration: 0.5 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="insight-header">
+              <div className="insight-indicator">📈</div>
+              <h4>Predicted Insight</h4>
+            </div>
+            <p className="insight-description">{msg}</p>
+          </motion.div>
+        ));
+      } else {
+        return insights.map((insight, index) => (
+          <motion.div
+            key={index}
+            className={`insight-card ${insight.type}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 + index * 0.1, duration: 0.5 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className={`insight-indicator ${insight.type}`}>
+              {insight.type === "positive" && "✅"}
+              {insight.type === "warning" && "⚠️"}
+              {insight.type === "info" && "ℹ️"}
+            </div>
+            <h4>{insight.title}</h4>
+            <p className="insight-description">{insight.description}</p>
+            <div className="insight-recommendation">
+              <strong>Recommendation:</strong> {insight.recommendation}
+            </div>
+          </motion.div>
+        ));
+      }
+    })()}
+  </div>
+</motion.div>
 
-      </motion.div>
 
       {/* Achievements Progress */}
       <motion.div
@@ -581,17 +561,19 @@ const activityData = {
         </div>
 
         <div className="achievements-progress-grid">
-          {state.achievements.map((achievement, index) => (
+          {state.achievements?.map((achievement, index) => (
             <motion.div
               key={achievement.id}
-              className={`achievement-progress-card ${achievement.unlocked ? 'unlocked' : ''}`}
+              className={`achievement-progress-card ${
+                achievement.unlocked ? "unlocked" : ""
+              }`}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1.2 + index * 0.05, duration: 0.4 }}
               whileHover={{ scale: 1.02 }}
             >
               <div className="achievement-icon">
-                {achievement.unlocked ? '🏆' : '🔒'}
+                {achievement.unlocked ? "🏆" : "🔒"}
               </div>
               <div className="achievement-info">
                 <h4>{achievement.name}</h4>
@@ -611,5 +593,6 @@ const activityData = {
     </div>
   );
 };
+
 
 export default Analytics;
