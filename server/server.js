@@ -1,4 +1,3 @@
-// server.js
 require('dotenv').config();  // loads variables from server/.env
 
 const express = require('express');
@@ -9,70 +8,72 @@ const app = express();
 
 // read env vars
 const PORT = process.env.PORT || 5001;
-const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://localhost:5002";  // points to Flask service
+const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://localhost:5002";
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// ------------------- ROUTES ------------------- //
-
-// 1. Historical Analytics (mock data)
-app.get('/api/analytics/history/:userId', (req, res) => {
-    console.log(`[API] Request for history for user ${req.params.userId}`);
-
-    const range = req.query.range === 'week' ? 7 : 30;
-    const historicalData = [];
-
+// ------------------- Helpers ------------------- //
+function generateHistory(range) {
+    const data = [];
     for (let i = range - 1; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
-
         const balance =
             65 + Math.sin(i * 0.5) * 15 + (Math.random() - 0.5) * 10;
-
-        historicalData.push({
+        data.push({
             log_date: date.toISOString().split('T')[0],
             wellness_balance: Math.round(Math.max(0, Math.min(100, balance))),
         });
     }
+    return data;
+}
 
-    res.json(historicalData);
+// ------------------- ROUTES ------------------- //
+
+// 1. Historical Analytics (mock data)
+app.get('/api/analytics/history/:userId', (req, res) => {
+    console.log(`[API] History request for user ${req.params.userId}`);
+    const range = req.query.range === 'week' ? 7 : 30;
+    res.json(generateHistory(range));
 });
 
 // 2. Forecast (calls Flask ML)
 app.get('/api/analytics/forecast/:userId', async (req, res) => {
-    console.log(`[API] Request for forecast for user ${req.params.userId}`);
+  console.log(`[API] Forecast request for user ${req.params.userId}`);
+  try {
+    const response = await axios.post(`${ML_SERVICE_URL}/forecast`, {
+      user_id: req.params.userId,
+    });
 
-    try {
-        const response = await axios.post(`${ML_SERVICE_URL}/forecast`, {
-            user_id: req.params.userId,
-        });
-        res.json(response.data);
-    } catch (error) {
-        console.error("[API] Forecast error:", error.message);
-        res.status(500).json({ error: "Failed to fetch forecast data" });
-    }
+    // Wrap into object { values: [...] }
+    res.json({ values: response.data });
+  } catch (error) {
+    console.error("[API] Forecast error:", error.response?.data || error.message);
+    res.status(500).json({ error: "Failed to fetch forecast data" });
+  }
 });
 
 // 3. Recommendations (calls Flask ML)
 app.get('/api/quests/recommendations/:userId', async (req, res) => {
-    console.log(`[API] Request for recommendations for user ${req.params.userId}`);
+  console.log(`[API] Recommendations request for user ${req.params.userId}`);
+  try {
+    const response = await axios.post(`${ML_SERVICE_URL}/recommendations`, {
+      user_id: req.params.userId,
+      weakest_gem: "soul", // TODO: make dynamic later
+    });
 
-    try {
-        const response = await axios.post(`${ML_SERVICE_URL}/recommendations`, {
-            user_id: req.params.userId,
-            weakest_gem: "soul", // <-- later you can make this dynamic
-        });
-        res.json(response.data);
-    } catch (error) {
-        console.error("[API] Recommendations error:", error.message);
-        res.status(500).json({ error: "Failed to fetch recommendations" });
-    }
+    // Wrap into object { recommendations: [...] }
+    res.json({ recommendations: response.data });
+  } catch (error) {
+    console.error("[API] Recommendations error:", error.response?.data || error.message);
+    res.status(500).json({ error: "Failed to fetch recommendations" });
+  }
 });
 
 // ------------------- START SERVER ------------------- //
 app.listen(PORT, () => {
-    console.log(`✅ Backend server running on http://localhost:${PORT}`);
+    console.log(`✅ Backend running on http://localhost:${PORT}`);
     console.log(`🔗 Connected to ML service at ${ML_SERVICE_URL}`);
 });
