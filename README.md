@@ -1,17 +1,6 @@
-How to run the project locally
+# Project Setup Guide
 
-An end-to-end **Health & Wellness Application** integrating **Frontend (Vite + React)**, **Backend (Node.js + Express)**, and **AI/ML Microservice (Python + Flask)** — all working together seamlessly.
-
----
-
-## ✨ Features
-
-✅ Modern React-based UI  
-✅ Node.js Backend API  
-✅ Python AI/ML Service for Predictions / Recommendations  
-✅ Modular Architecture for Easy Scaling  
-
----
+This README will guide you through the steps to run this project locally. The project consists of three main components: a Python-based AI/ML microservice, a Node.js backend, and a frontend built with Vite.
 
 ## 📁 Project Structure
 
@@ -26,7 +15,29 @@ An end-to-end **Health & Wellness Application** integrating **Frontend (Vite + R
 ├── vite.config.js     # Vite configuration
 └── README.md          # You're reading it!
 
+git clone <repository-url>
+cd <repository-directory>
 
+cd <project-directory>
+
+npm install
+
+npm run dev
+
+cd server
+
+npm install
+
+npm start
+cd ml
+
+python -m venv venv
+venv\Scripts\activate
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+python app.py
 
 # 🧠⚡💎 The Gauntlet of Well-Being 💎⚡🧠
 
