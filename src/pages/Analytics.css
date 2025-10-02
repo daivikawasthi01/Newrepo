@@ -510,3 +510,24 @@
 .insight-card:hover {
   transform: translateY(-2px);
 }
+.toggle-container {
+  margin-top: 10px;
+}
+
+.toggle-btn {
+  background: #4a90e2;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.toggle-btn:hover {
+  background: #357ABD;
+}
+
+.toggle-btn.active {
+  background: #27ae60;
+}
